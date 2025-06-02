@@ -32,7 +32,7 @@ Base de données : MySQL.
 
 Prérequis
 
-Python 3.8+
+Python 3.12+
 MySQL (configuré avec une base de données)
 pip (pour installer les dépendances)
 
@@ -43,7 +43,7 @@ pip install django djangorestframework django-crontab Faker reportlab openpyxl d
 Installation
 
 Cloner le dépôt :
-git clone <url-du-dépôt>
+git clone
 cd gestion_professeurs
 
 

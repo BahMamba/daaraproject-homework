@@ -1,0 +1,64 @@
+.matieres-card {
+  margin: 1.5rem;
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+  border-radius: 0.5rem;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 20rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.row-hover:hover {
+  background-color: #f3f4f6;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  color: #6b7280;
+}
+
+.empty-state mat-icon {
+  margin-right: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .matieres-card {
+    margin: 1rem;
+    padding: 0.5rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .search-field {
+    max-width: 100%;
+  }
+}

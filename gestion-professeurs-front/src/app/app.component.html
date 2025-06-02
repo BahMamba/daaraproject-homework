@@ -1,0 +1,33 @@
+<mat-toolbar color="primary" class="navbar">
+  <span class="logo">DaaraManage</span>
+  <span class="spacer"></span>
+  <div class="nav-links">
+    <!-- <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a> -->
+    <a mat-button routerLink="/niveaux" routerLinkActive="active">Niveaux</a>
+    <a mat-button routerLink="/matieres" routerLinkActive="active">Matières</a>
+    <a mat-button routerLink="/professors" routerLinkActive="active">Professeurs</a>
+  </div>
+  <div class="profile" *ngIf="user">
+    <span class="greeting">Bienvenue {{ user.last_name }}</span>
+    <button mat-icon-button (click)="logout()" title="Déconnexion">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+  <ng-template #loginLink>
+    <a mat-button routerLink="/auth">Connexion</a>
+  </ng-template>
+</mat-toolbar>
+
+<div class="content">
+  <router-outlet />
+</div>
+
+<ng-template #sessionExpiredDialog>
+  <h2 mat-dialog-title>Session Expirée</h2>
+  <mat-dialog-content>
+    <p>Session expirée ! Veuillez vous reconnecter.</p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" mat-dialog-close>OK</button>
+  </mat-dialog-actions>
+</ng-template>

@@ -1,0 +1,36 @@
+<div class="niveau-form-container">
+  <h2 class="form-title">{{ isEditMode ? 'Modifier le Niveau' : 'Ajouter un Niveau' }}</h2>
+  <button mat-raised-button color="accent" [routerLink]="['/niveaux']" [disabled]="loading" class="return-button mb-4 flex items-center gap-2">
+    <mat-icon>arrow_back</mat-icon>
+    Retour
+  </button>
+  <form [formGroup]="niveauForm" (ngSubmit)="onSubmit()" class="niveau-form">
+    <div class="form-group">
+      <label for="nom">Nom</label>
+      <input id="nom" type="text" formControlName="nom" [class.invalid]="niveauForm.get('nom')?.invalid && niveauForm.get('nom')?.touched" placeholder="Entrez le nom" />
+      <div class="error" *ngIf="niveauForm.get('nom')?.invalid && niveauForm.get('nom')?.touched">
+        Le nom est requis.
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="niveauForm.invalid || loading">
+        {{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}
+      </button>
+      <button mat-button type="button" class="secondary" [routerLink]="['/niveaux']" [disabled]="loading">Annuler</button>
+    </div>
+
+    <div class="loading-spinner" *ngIf="loading">
+      <span class="spinner"></span> Chargement...
+    </div>
+    <div class="error-message" *ngIf="error">{{ error }}</div>
+  </form>
+</div>
+
+<ng-template #successDialog let-data>
+  <h2 mat-dialog-title>Succès</h2>
+  <mat-dialog-content>{{ data.message }}</mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>OK</button>
+  </mat-dialog-actions>
+</ng-template>

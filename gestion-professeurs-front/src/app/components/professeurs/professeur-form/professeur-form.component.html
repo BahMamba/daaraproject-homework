@@ -1,0 +1,50 @@
+<div class="professeur-form-container">
+  <button mat-raised-button color="accent" [routerLink]="['/professors']" [disabled]="loading" class="return-button mb-4 flex items-center gap-2">
+    <mat-icon>arrow_back</mat-icon>
+    Retour
+  </button>
+  <h2 class="form-title">{{ isEditMode ? 'Modifier le Professeur' : 'Ajouter un Professeur' }}</h2>
+  <form [formGroup]="professeurForm" (ngSubmit)="onSubmit()" class="professeur-form">
+    <div class="form-group">
+      <label for="nom">Nom</label>
+      <input id="nom" type="text" formControlName="nom" [class.invalid]="professeurForm.get('nom')?.invalid && professeurForm.get('nom')?.touched" placeholder="Entrez le nom" />
+      <div class="error" *ngIf="professeurForm.get('nom')?.invalid && professeurForm.get('nom')?.touched">
+        Le nom est requis.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" [class.invalid]="professeurForm.get('email')?.invalid && professeurForm.get('email')?.touched" placeholder="exemple@email.com" />
+      <div class="error" *ngIf="professeurForm.get('email')?.invalid && professeurForm.get('email')?.touched">
+        Email valide requis.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="specialite">Spécialité</label>
+      <input id="specialite" type="text" formControlName="specialite" [class.invalid]="professeurForm.get('specialite')?.invalid && professeurForm.get('specialite')?.touched" placeholder="Spécialité" />
+      <div class="error" *ngIf="professeurForm.get('specialite')?.invalid && professeurForm.get('specialite')?.touched">
+        La spécialité est requise.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="telephone">Téléphone</label>
+      <input id="telephone" type="tel" formControlName="telephone" [class.invalid]="professeurForm.get('telephone')?.invalid && professeurForm.get('telephone')?.touched" placeholder="Numéro de téléphone" />
+      <div class="error" *ngIf="professeurForm.get('telephone')?.invalid && professeurForm.get('telephone')?.touched">
+        <span *ngIf="professeurForm.get('telephone')?.errors?.['required']">Le téléphone est requis.</span>
+        <span *ngIf="professeurForm.get('telephone')?.errors?.['pattern']">Format invalide (ex. +123456789).</span>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="professeurForm.invalid || loading">
+        {{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}
+      </button>
+      <button mat-button type="button" class="secondary" [routerLink]="['/professors']" [disabled]="loading">Annuler</button>
+    </div>
+
+    <div class="loading-spinner" *ngIf="loading">
+      <span class="spinner"></span> Chargement...
+    </div>

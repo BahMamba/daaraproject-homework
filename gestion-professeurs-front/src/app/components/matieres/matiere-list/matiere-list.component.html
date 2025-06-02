@@ -1,0 +1,79 @@
+<mat-card class="matieres-card">
+  <mat-toolbar color="primary" class="toolbar">
+    <span>Liste des Matières</span>
+    <span class="spacer"></span>
+    <div class="actions">
+      <button mat-raised-button color="accent" routerLink="/matieres/create">
+        <mat-icon>add</mat-icon> Ajouter
+      </button>
+      <button mat-raised-button color="primary" (click)="exportPdf()">
+        <mat-icon>download</mat-icon> Exporter PDF
+      </button>
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Recherche</mat-label>
+        <input matInput [value]="search" (input)="onSearch($event)" placeholder="Nom de la matière">
+        <button mat-icon-button matSuffix *ngIf="search" (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </mat-toolbar>
+
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+  <div class="table-container">
+    <table mat-table [dataSource]="matieres" class="mat-elevation-z1" *ngIf="!isLoading && matieres.length">
+      <ng-container matColumnDef="nom">
+        <th mat-header-cell *matHeaderCellDef>Nom</th>
+        <td mat-cell *matCellDef="let matiere">{{ matiere.nom }}</td>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Description</th>
+        <td mat-cell *matCellDef="let matiere">{{ matiere.description }}</td>
+      </ng-container>
+      <ng-container matColumnDef="professeur">
+        <th mat-header-cell *matHeaderCellDef>Professeur</th>
+        <td mat-cell *matCellDef="let matiere">{{ matiere.professeur.nom }}</td>
+      </ng-container>
+      <ng-container matColumnDef="niveaux">
+        <th mat-header-cell *matHeaderCellDef>Niveaux</th>
+        <td mat-cell *matCellDef="let matiere">{{ getNiveauxNames(matiere) }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let matiere">
+          <button mat-icon-button color="primary" [routerLink]="['/matieres/edit', matiere.id]">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="openDeleteModal(matiere)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="row-hover"></tr>
+    </table>
+
+    <div *ngIf="!isLoading && !matieres.length" class="empty-state">
+      <mat-icon>info</mat-icon>
+      <span>Aucune matière trouvée</span>
+    </div>
+  </div>
+
+  <mat-paginator
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageIndex]="page - 1"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+  ></mat-paginator>
+</mat-card>
+
+<ng-template #deleteDialog let-data>
+  <h2 mat-dialog-title>Confirmer</h2>
+  <mat-dialog-content>Supprimer {{ data.nom }} ?</mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Annuler</button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="true">Supprimer</button>
+  </mat-dialog-actions>
+</ng-template>

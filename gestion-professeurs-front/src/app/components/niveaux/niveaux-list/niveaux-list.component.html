@@ -1,0 +1,76 @@
+<mat-card class="niveaux-card">
+  <mat-toolbar color="primary" class="toolbar">
+    <span>Liste des Niveaux</span>
+    <span class="spacer"></span>
+    <div class="actions">
+      <button mat-raised-button color="accent" routerLink="/niveaux/create">
+        <mat-icon>add</mat-icon> Ajouter
+      </button>
+      <button mat-raised-button color="primary" (click)="openImportModal()">
+        <mat-icon>upload</mat-icon> Importer Excel
+      </button>
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Recherche</mat-label>
+        <input matInput [(ngModel)]="search" (ngModelChange)="onSearch($event)" placeholder="Nom du niveau">
+      </mat-form-field>
+    </div>
+  </mat-toolbar>
+
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+  <div class="table-container">
+    <table mat-table [dataSource]="niveaux" class="mat-elevation-z1" *ngIf="!isLoading && niveaux.length">
+      <ng-container matColumnDef="nom">
+        <th mat-header-cell *matHeaderCellDef>Nom</th>
+        <td mat-cell *matCellDef="let niveau">{{ niveau.nom }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let niveau">
+          <button mat-icon-button color="primary" [routerLink]="['/niveaux/edit', niveau.id]">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="openDeleteModal(niveau)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="row-hover"></tr>
+    </table>
+
+    <div *ngIf="!isLoading && !niveaux.length" class="empty-state">
+      <mat-icon>info</mat-icon>
+      <span>Aucun niveau trouvé</span>
+    </div>
+  </div>
+
+  <mat-paginator
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageIndex]="page - 1"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+  ></mat-paginator>
+</mat-card>
+
+<ng-template #deleteDialog let-data>
+  <h2 mat-dialog-title>Confirmer</h2>
+  <mat-dialog-content>Supprimer {{ data.nom }} ?</mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Annuler</button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="true">Supprimer</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #importDialog>
+  <h2 mat-dialog-title>Importer Niveaux</h2>
+  <mat-dialog-content>
+    <p>Fichier Excel avec colonne "nom".</p>
+    <input type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)">
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Annuler</button>
+    <button mat-raised-button color="primary" (click)="importNiveaux()" [disabled]="!selectedFile">Importer</button>
+  </mat-dialog-actions>
+</ng-template>

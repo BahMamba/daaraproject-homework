@@ -1,0 +1,62 @@
+<div class="matiere-container">
+  <h2 class="mat-headline-6">{{ isEditMode ? 'Modifier Matière' : 'Ajouter Matière' }}</h2>
+    <button mat-raised-button color="accent" [routerLink]="['/matieres']" [disabled]="loading" class="return-button mb-4 flex items-center gap-2">
+    <mat-icon>arrow_back</mat-icon>
+    Retour
+  </button>
+  <form [formGroup]="matiereForm" (ngSubmit)="onSubmit()" class="matiere-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="nom" placeholder="Ex. Mathématiques">
+      <mat-error *ngIf="matiereForm.get('nom')?.touched && matiereForm.get('nom')?.invalid">
+        Nom requis.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <input matInput formControlName="description" placeholder="Cours de maths">
+      <mat-error *ngIf="matiereForm.get('description')?.touched && matiereForm.get('description')?.invalid">
+        Description requise.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Professeur</mat-label>
+      <mat-select formControlName="professeur_nom">
+        <mat-option *ngFor="let prof of professors" [value]="prof.nom">{{ prof.nom }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="matiereForm.get('professeur_nom')?.touched && matiereForm.get('professeur_nom')?.invalid">
+        Professeur requis.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Niveaux</mat-label>
+      <mat-select formControlName="niveaux_noms" multiple>
+        <mat-option *ngFor="let niveau of niveaux" [value]="niveau.nom">{{ niveau.nom }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="matiereForm.invalid || loading">
+        {{ isEditMode ? 'Modifier' : 'Ajouter' }}
+      </button>
+      <button mat-button color="warn" type="button" [routerLink]="['/matieres']" [disabled]="loading">Annuler</button>
+    </div>
+
+    <div class="loading" *ngIf="loading">
+      <mat-spinner diameter="20"></mat-spinner>
+      <span>Chargement...</span>
+    </div>
+    <mat-error *ngIf="error">{{ error }}</mat-error>
+  </form>
+</div>
+
+<ng-template #successDialog let-data>
+  <h2 mat-dialog-title>Succès</h2>
+  <mat-dialog-content>{{ data.message }}</mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>OK</button>
+  </mat-dialog-actions>
+</ng-template>
